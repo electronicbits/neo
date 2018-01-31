@@ -1,0 +1,216 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Pipeline'
+
+Resources:
+
+  # Private repository that stores Docker images
+  ArtifactsRepository:
+    DependsOn: CloudFormationRole # make sure that CloudFormationRole is deleted last
+    DeletionPolicy: Retain
+    Type: 'AWS::ECR::Repository'
+    Properties: {}
+
+  # S3 bucket to store artifacts used between deployment stages
+  ArtifactsBucket:
+    DependsOn: CloudFormationRole # make sure that CloudFormationRole is deleted last
+    DeletionPolicy: Retain
+    Type: 'AWS::S3::Bucket'
+  
+  PipelineRole:
+    DependsOn: CloudFormationRole # make sure that CloudFormationRole is deleted last
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - 'codepipeline.amazonaws.com'
+          Action:
+          - 'sts:AssumeRole'
+      ManagedPolicyArns:
+      - 'arn:aws:iam::aws:policy/AdministratorAccess'
+
+  CloudFormationRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - 'cloudformation.amazonaws.com'
+          Action:
+          - 'sts:AssumeRole'
+      ManagedPolicyArns:
+      - 'arn:aws:iam::aws:policy/AdministratorAccess'
+
+  CodeBuildRole:
+    DependsOn: CloudFormationRole # make sure that CloudFormationRole is deleted last
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - 'codebuild.amazonaws.com'
+          Action:
+          - 'sts:AssumeRole'
+      Policies:
+      - PolicyName: ServiceRole
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Sid: CloudWatchLogsPolicy
+            Effect: Allow
+            Action: 
+            - 'logs:CreateLogGroup'
+            - 'logs:CreateLogStream'
+            - 'logs:PutLogEvents'
+            Resource: '*'
+          - Sid: CodeCommitPolicy
+            Effect: Allow
+            Action: 'codecommit:GitPull'
+            Resource: '*'
+          - Sid: S3GetObjectPolicy
+            Effect: Allow
+            Action: 
+            - 's3:GetObject'
+            - 's3:GetObjectVersion'
+            Resource: '*'
+          - Sid: S3PutObjectPolicy
+            Effect: 'Allow'
+            Action: 's3:PutObject'
+            Resource: '*'
+  
+  
+  CodeBuildCreatePipelineProject:
+    Type: AWS::CodeBuild::Project
+    DependsOn: CodeBuildRole
+    Properties:
+      Name: !Sub ${AWS::StackName}-DeploySite
+      Description: Deploy site to S3
+      ServiceRole: !GetAtt CodeBuildRole.Arn
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        Type: !Ref BuildType
+        ComputeType: !Ref BuildComputeType
+        Image: !Sub ${BuildImage}
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: !Sub |
+          version: 0.1
+          phases:
+            build:
+              commands:
+                - bundle install && bundle update && bundle exec rake create_pipeline 
+          artifacts:
+            type: zip
+            files:
+              - ./html/index.html
+      TimeoutInMinutes: 10
+
+  # CreatePipelineProject:
+  #   DependsOn: CloudFormationRole # make sure that CloudFormationRole is deleted last
+  #   Type: 'AWS::CodeBuild::Project'
+  #   Properties:
+  #     Artifacts:
+  #       Type: CODEPIPELINE
+  #     Environment:
+  #       ComputeType: 'BUILD_GENERAL1_SMALL'
+  #       Image: 'aws/codebuild/docker:1.12.1'  ## needs an image with ruby
+  #       Type: 'LINUX_CONTAINER'
+  #     Name: !Sub '${AWS::StackName}-image'
+  #     ServiceRole: !GetAtt 'ImageCodeBuildRole.Arn'
+  #     Source:
+  #       Type: CODEPIPELINE
+  #       BuildSpec: !Sub |
+  #         version: 0.1
+  #         phases:
+  #           build:
+  #             commands:
+  #             - 'bundle install && bundle update && bundle exec rake create_pipeline'
+  #         artifacts:
+  #           files:
+  #           - 'template/result.yml'
+  #     TimeoutInMinutes: 10
+
+
+  Pipeline:
+    Type: 'AWS::CodePipeline::Pipeline'
+    Properties:
+      ArtifactStore:
+        Type: S3
+        Location: !Ref ArtifactsBucket
+      Name: !Ref 'AWS::StackName'
+      RestartExecutionOnUpdate: true
+      RoleArn: !GetAtt 'PipelineRole.Arn'
+      Stages:
+
+      # SOURCE STAGE
+
+      - Name: Source
+        Actions:
+        - InputArtifacts: [] 
+          Name: Source
+          ActionTypeId:
+            Category: Source
+            Owner: ThirdParty
+            Version: '1'
+            Provider: GitHub
+          Configuration:
+            Owner: <%= config.gitHubUser %>
+            Repo: <%= config.gitHubRepo %> 
+            Branch: <%= config.gitHubBranch %> 
+            OAuthToken: <%= config.gitHubToken %> 
+          OutputArtifacts:
+            - Name: Source
+          RunOrder: 1     
+
+      # CREATE PIPELINE STAGE
+
+      # - Name: Pipeline
+      #   Actions:
+      #   - Name: DeployPipeline
+      #     ActionTypeId:
+      #       Category: Deploy
+      #       Owner: AWS
+      #       Provider: CloudFormation
+      #       Version: 1
+      #     Configuration:
+      #       ActionMode: CREATE_UPDATE
+      #       Capabilities: CAPABILITY_IAM
+      #       RoleArn: !GetAtt 'CloudFormationRole.Arn'
+      #       StackName: !Ref 'AWS::StackName'
+      #       TemplatePath: 'Source::deploy/pipeline.yml'
+      #       ParameterOverrides: !Sub '{"RepositoryName": "<%= config.gitHubRepo %> ", "BranchName": "<%= config.gitHubBranch %> "}'
+      #     InputArtifacts:
+      #     - Name: Source
+      #     RunOrder: 1
+
+      # PIPELINE UPDATE STAGE
+
+      - Name: Pipeline
+        Actions:
+        - Name: DeployPipeline
+          ActionTypeId:
+            Category: Deploy
+            Owner: AWS
+            Provider: CloudFormation
+            Version: 1
+          Configuration:
+            ActionMode: CREATE_UPDATE
+            Capabilities: CAPABILITY_IAM
+            RoleArn: !GetAtt 'CloudFormationRole.Arn'
+            StackName: !Ref 'AWS::StackName'
+            TemplatePath: 'Source::deploy/pipeline.yml'
+            ParameterOverrides: !Sub '{"RepositoryName": "<%= config.gitHubRepo %> ", "BranchName": "<%= config.gitHubBranch %> "}'
+          InputArtifacts:
+          - Name: Source
+          RunOrder: 1
+      
