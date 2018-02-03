@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "neo"
   spec.version       = Neo::VERSION
   spec.authors       = ["Dario Alvarez"]
-  spec.email         = ["d.alvarez@nib.com.au"]
+  spec.email         = ["dario@electronic-bits.com"]
 
   spec.summary       = "deploy and build your applications using AWS code tools"
   spec.description   = "deploy and build your applications using AWS code tools"
@@ -27,7 +27,8 @@ Gem::Specification.new do |spec|
     f.match(%r{^(test|spec|features)/})
   end
   spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  # spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.executables = ['console', 'neo', 'setup']
   spec.require_paths = ["lib"]
 
   spec.add_dependency 'commander'
