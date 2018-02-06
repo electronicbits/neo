@@ -48,3 +48,27 @@ In many cases, CodeBuild project will suffice, as it will be a matter of simply 
 
 - copy resources to a S3 bucket
 - build and upload docker images (the build will not just create the image, but also execute any build process)
+
+
+### Running Neo
+
+You have two options:
+
+1- Install the gem locally:
+
+After cloning this repository, build the gem file:
+
+- gem build neo.gemspec
+
+Once the gem file is generated, proceed to install it locally
+
+- gem install --local neo-0.1.0.gem
+
+You can now run neo as a CLI:
+
+- bundle exec neo build
+
+2- Run the bin file directly after cloning the repo:
+
+- bundle exec ruby .\bin\neo build 
+

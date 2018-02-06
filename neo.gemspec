@@ -23,12 +23,12 @@ Gem::Specification.new do |spec|
       "public gem pushes."
   end
 
-  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features)/})
-  end
-  spec.bindir        = "exe"
+  # spec.files         = `git ls-files -z`.split("\x0").reject do |f|
+  #   f.match(%r{^(test|spec|features)/})
+  # end
+  # spec.bindir        = "bin"
   # spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-  spec.executables = ['console', 'neo', 'setup']
+  spec.executables = ["neo"]
   spec.require_paths = ["lib"]
 
   spec.add_dependency 'commander'
