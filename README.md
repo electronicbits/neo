@@ -58,17 +58,17 @@ You have two options:
 
 After cloning this repository, build the gem file:
 
-- gem build neo.gemspec
+`gem build neo.gemspec`
 
 Once the gem file is generated, proceed to install it locally
 
-- gem install --local neo-0.1.0.gem
+`gem install --local neo-0.1.0.gem`
 
 You can now run neo as a CLI:
 
-- bundle exec neo build
+`bundle exec neo build`
 
 2- Run the bin file directly after cloning the repo:
 
-- bundle exec ruby .\bin\neo build 
+`bundle exec ruby .\bin\neo build`
 
