@@ -4,9 +4,7 @@ Manage your CI/CD pipelines without the need for build and deployment agents, us
 
 ![neo vs agent](https://github.com/electronicbits/neo/blob/master/neo.gif "neo vs agent")
 
-Join neo to fight against the (build/deploy) agents.
-
-Based on the principle of "assuming less responsibilities, while at the same time achieving the same goal".
+Assume less responsibilities, while at the same time achieving the same goal.
 
 ## Advantages:
 
