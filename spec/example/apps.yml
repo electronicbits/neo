@@ -1,0 +1,20 @@
+code:
+  codeHost: github 
+  repository: hello-world
+
+apps:
+  hello-world:
+    os: windows
+    path: hello-world
+    type: s3-website
+    build: 
+      - 'npm install && npm run build'
+    deploy:
+      execute: 'aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}-Test/'
+      command: approve
+      execute: 'aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}/'
+    settings:
+      test:
+        setting1: tes1-setting
+      prod:
+        setting1: tes1-setting
