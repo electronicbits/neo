@@ -1,6 +1,6 @@
 # Neo
 
-Manage your CI/CD pipelines without the need for build and deployment agents, using AWS code tools.
+Manage your CI/CD pipelines without the need for build and deployment agents (get it?), using AWS code tools.
 
 ![neo vs agent](https://github.com/electronicbits/neo/blob/master/neo.gif "neo vs agent")
 
