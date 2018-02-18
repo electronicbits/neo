@@ -33,14 +33,21 @@ $VERBOSE = old_verbose
 # end
 
 command :create_pipeline do |c|
-  c.syntax = 'neo create_pipeline'
+  c.syntax = 'neo create_pipeline <configfile>'
   c.description = 'Creates a codepipeline in AWS'
   c.action do |args, options|
-    puts 'Creating codepipeline ...'
     
+    puts 'Creating codepipeline ...'
+
+    configfile = args[0]
+    puts configfile
+    option = options[0]
+    puts option
     yaml_parser = Neo::ConfigYmlParser.new
 
     yaml_parser.parse
+
+    
 
   end
 end

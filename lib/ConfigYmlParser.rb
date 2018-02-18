@@ -13,10 +13,10 @@ module Neo
 
             parsed_file = YAML.load_file(filename)
 
-            puts parsed_file.inspect
+            p parsed_file.inspect # will print the file
 
             #TODO load parsed file into model
-            # configmodel = ConfigModel.new
+            configmodel = ConfigModel.new
             
         end
 
