@@ -5,6 +5,8 @@ module Neo
         
         # attr_accessor :codeHost         # github, bitbucket, codecommit ?
 
+        attr_accessor :test
+
         attr_accessor :codeRepo
 
         attr_accessor :siteBucketName   #ie 'static-site-554433'
@@ -25,8 +27,8 @@ module Neo
 
         def initialize(options)
             @options = options
-
-            @codeHost = options["code"]["codeHost"]
+            @test = "this is a testsssssss"
+            # @codeHost = options["code"]["codeHost"]
             # @user = options["code"]["user"]
             
             @codeRepo = CodeRepoModelFactory.new(options["code"])
@@ -36,5 +38,8 @@ module Neo
             
         end
 
+        def get_binding
+            binding
+        end
     end
 end

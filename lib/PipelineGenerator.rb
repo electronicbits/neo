@@ -6,12 +6,14 @@ module Neo
         
         attr_reader :model, :template_location
 
-        def initialize(model, template_location)
+        def initialize(model, template_file_location)
             @model = model
-            @template_location = template_location
+            @template_location = template_file_location
         end
 
         def create_pipeline
+            puts "creating codepipeline cloudformation"
+
             templateFileLocation = File.join(File.dirname(__FILE__), @template_location)
             templateString = File.read(templateFileLocation)
             template = ERB.new(templateString, nil, '-')

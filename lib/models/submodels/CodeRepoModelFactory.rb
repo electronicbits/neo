@@ -5,6 +5,11 @@ module Neo
         
         def initialize(options)
             @user = options["user"]
+            
+        end
+        
+        def get_binding
+            binding
         end
     end
 end
