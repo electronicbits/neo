@@ -1,7 +1,11 @@
+require 'models/submodels/CodeRepoModelFactory'
+
 module Neo
     class ConfigModel
         
-        attr_accessor :codeHost         # github, bitbucket, codecommit ?
+        # attr_accessor :codeHost         # github, bitbucket, codecommit ?
+
+        attr_accessor :codeRepo
 
         attr_accessor :siteBucketName   #ie 'static-site-554433'
         attr_accessor :user             #ie 'electronicbits'
@@ -23,8 +27,9 @@ module Neo
             @options = options
 
             @codeHost = options["code"]["codeHost"]
-            @user = options["code"]["user"]
+            # @user = options["code"]["user"]
             
+            @codeRepo = CodeRepoModelFactory.new(options["code"])
 
             # @user = options[code]
             # @codeHost = options.codeHost

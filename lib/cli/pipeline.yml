@@ -16,6 +16,6 @@ apps:
       execute: 'aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}/'
     settings:
       test:
-        setting1: tes1-setting
+        setting1: setting-in-test
       prod:
-        setting1: tes1-setting
+        setting1: setting-in-prod
