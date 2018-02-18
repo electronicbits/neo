@@ -23,8 +23,8 @@ module Neo
         def initialize(options)
             @options = options
 
-            @user = options.user
-            @codeHost = options.codeHost
+            # @user = options.user
+            # @codeHost = options.codeHost
             
         end
 

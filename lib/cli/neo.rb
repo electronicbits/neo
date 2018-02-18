@@ -5,7 +5,7 @@ $VERBOSE = nil
 require 'rubygems'
 require 'commander/import'
 require 'version'
-require 'ConfigYmlParser'
+require 'Startup'
 
 program :name 
 program :version, Neo::VERSION
@@ -39,13 +39,11 @@ command :create_pipeline do |c|
     
     puts 'Creating codepipeline ...'
 
-    configfile = args[0]
-    puts configfile
-    option = options[0]
-    puts option
-    yaml_parser = Neo::ConfigYmlParser.new
+    config_file = args[0]
+    
+    startup = Neo::Startup.new 
 
-    yaml_parser.parse
+    startup.parse(config_file)
 
     
 
