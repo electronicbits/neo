@@ -1,10 +1,9 @@
 module Neo
     class ConfigModel
         
-        attr_accessor :siteBucketName   #ie 'static-site-554433'
-
         attr_accessor :codeHost         # github, bitbucket, codecommit ?
-        
+
+        attr_accessor :siteBucketName   #ie 'static-site-554433'
         attr_accessor :user             #ie 'electronicbits'
         attr_accessor :repo             #ie 'helloworld'
         attr_accessor :branch           #ie 'master'
@@ -23,7 +22,11 @@ module Neo
         def initialize(options)
             @options = options
 
-            # @user = options.user
+            @codeHost = options["code"]["codeHost"]
+            @user = options["code"]["user"]
+            
+
+            # @user = options[code]
             # @codeHost = options.codeHost
             
         end

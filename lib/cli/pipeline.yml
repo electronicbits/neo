@@ -1,6 +1,7 @@
 code:
   codeHost: github 
   repository: hello-world
+  user: electronic-bits
 
 apps:
   hello-world:

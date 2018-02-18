@@ -1,5 +1,5 @@
 require 'yaml'
-require 'ConfigModel'
+require 'models/ConfigModel'
 require 'FileUtils'
 
 module Neo
