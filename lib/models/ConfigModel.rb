@@ -1,4 +1,4 @@
-require 'models/submodels/CodeRepoModelFactory'
+require 'models/CodeModel'
 
 module Neo
     class ConfigModel
@@ -27,11 +27,8 @@ module Neo
 
         def initialize(options)
             @options = options
-            @test = "this is a testsssssss"
-            # @codeHost = options["code"]["codeHost"]
-            # @user = options["code"]["user"]
             
-            @codeRepo = CodeRepoModelFactory.new(options["code"])
+            @codeRepo = Neo::CodeModel.new(options["code"])
 
             # @user = options[code]
             # @codeHost = options.codeHost

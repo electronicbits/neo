@@ -18,7 +18,7 @@ $VERBOSE = old_verbose
 # global_option('-e', '--environment name', 'Must be kaos or prod')
 
 #in windows, run with 
-#bundle exec ruby .\bin\neo build 
+#bundle exec ruby .\bin\neo create_pipeline 
 #or ruby -Ilib .\bin\neo build
 #in linux, run with
 #bundle exec neo build
@@ -32,6 +32,9 @@ $VERBOSE = old_verbose
 #   end
 # end
 
+# run with
+# bundle exec ruby .\bin\neo create_pipeline \cli\pipeline.yml d:/DEV/aws-tools/neo/pipeline.yml --trace
+
 command :create_pipeline do |c|
   c.syntax = 'neo create_pipeline <configfile>'
   c.description = 'Creates a codepipeline in AWS'
@@ -40,10 +43,11 @@ command :create_pipeline do |c|
     puts 'Creating codepipeline ...'
 
     config_file = args[0]
+    result_file_location = args[1]
     
     startup = Neo::Startup.new 
 
-    startup.parse(config_file)
+    startup.parse(config_file, result_file_location)
 
     
 
