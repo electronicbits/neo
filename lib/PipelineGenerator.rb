@@ -17,15 +17,19 @@ module Neo
             template = ERB.new(templateString, nil, '-')
             result_file_content = template.result(model.get_binding)
 
-            # file = Tempfile.new("pipeline-cloudformation.yaml")
-            # uniqueFilename = File.expand_path File.basename(file.path)
-            # puts uniqueFilename
-            # file.close
-
             puts "Writing down pipeline result file (cloudformation)"
-            # File.write(uniqueFilename, result_file)
-            File.write(result_file_location, result_file_content)
-        end
 
+            if result_file_location.nil?
+                file = Tempfile.new(["pipeline-cloudformation",".yaml"])
+                uniqueFilename = File.expand_path File.basename(file.path)
+                puts uniqueFilename
+                file.close
+
+                File.write(uniqueFilename, result_file_content)
+            else
+                File.write(result_file_location, result_file_content)
+                
+            end
+        end
     end
 end
