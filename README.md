@@ -33,12 +33,12 @@ Two templates are included that allow to:
 - deploy static resources to a public S3 bucket
 - deploy node api application to docker
 
-### Can we update the (code)pipeline on the fly ?
+### Can the (code)pipeline be updated on the fly ?
 
 Yes. We need to set the RestartExecutionOnUpdate: true on the pipeline settings inside the cloudformation.
 Secondly, the second stage of the pipeline would be required to make a call to update the stack.
 
-### Do we need to use CodeDeploy to deploy applications?
+### Is CodeDeploy needed to deploy applications?
 
 Not always. 
 
