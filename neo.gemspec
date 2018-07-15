@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "deploy and build your applications using AWS code tools"
   spec.description   = "deploy and build your applications using AWS code tools"
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = "https://www.electronic-bits.com"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
