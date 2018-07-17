@@ -51,6 +51,8 @@ In many cases, CodeBuild project will suffice, as it will be a matter of simply 
 ### Running Neo
 
 You have two options:
+1- Installing the gem locally
+2- Run the bin file directly
 
 1- Install the gem locally:
 
@@ -64,9 +66,8 @@ Once the gem file is generated, proceed to install it locally
 
 You can now run neo as a CLI:
 
-`bundle exec neo build`
+`bundle exec neo create_pipeline`
 
 2- Run the bin file directly after cloning the repo:
 
-`bundle exec ruby .\bin\neo build`
-
+`bundle exec ruby ./bin/neo create_pipeline`

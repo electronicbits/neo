@@ -42,12 +42,14 @@ command :create_pipeline do |c|
     
     puts 'Creating codepipeline ...'
 
+    
     config_file = args[0]
+    puts args[0]
     result_file_location = args[1]
     
     startup = Neo::Startup.new 
 
-    startup.parse(config_file, result_file_location)
+    # startup.parse(config_file, result_file_location)
 
     
 

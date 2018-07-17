@@ -1,6 +1,6 @@
 require 'yaml'
 require 'models/ConfigModel'
-require 'FileUtils'
+require 'fileutils'
 require 'PipelineGenerator'
 
 module Neo
