@@ -23,18 +23,10 @@ Gem::Specification.new do |spec|
       "public gem pushes."
   end
 
-  # spec.files         = `git ls-files -z`.split("\x0").reject do |f|
-  #   f.match(%r{^(test|spec|features)/})
-  # end
-  # spec.bindir        = "bin"
-  # spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-  spec.executables = ["neo"]
+  spec.files = Dir["{bin,lib,spec}/**/*", "LICENSE", "README.md"]
+  spec.bindir        = "bin"
+  spec.executables   =  ["neo"] #spec.files.grep(%r{^exe/}) { |f| File.basename(f) }  
   spec.require_paths = ["lib"]
 
-  spec.add_dependency 'rake'
-  spec.add_dependency 'commander'
-
-  spec.add_development_dependency "bundler", "~> 1.15"
-  spec.add_development_dependency "rspec", "~> 3.0"
-  spec.add_development_dependency 'rubocop'
+  spec.add_dependency 'commander', '>= 4.4'
 end

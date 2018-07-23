@@ -1,3 +1,31 @@
 #!/usr/bin/env ruby
 
-require 'cli/neo'
+require 'rubygems'
+require 'commander/import'
+require 'Startup'
+require 'version'
+
+program :name, 'Neo'
+program :version, '1.0.0'
+program :description, 'Tools for creating and managing deploy and build pipelines in AWS'
+
+command :create_pipeline do |c|
+  c.syntax = 'neo create_pipeline <configfile>'
+  c.description = 'Creates a build and deployment pipeline in AWS'
+  c.action do |args, options|
+    
+    puts 'Creating codepipeline ...'
+
+    # config_file = args[0]
+    # puts args[0]
+    # # result_file_location = args[1]
+    
+    
+    # startup = Neo::Startup.new 
+
+    # startup.parse(config_file, result_file_location)
+
+    
+
+  end
+end
