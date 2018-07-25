@@ -72,7 +72,7 @@ Once the gem file is generated, proceed to install it locally
 
 You can now run neo as a CLI:
 
-`bundle exec neo create_pipeline`
+`neo create_pipeline`
 
 2- Run the bin file directly after cloning the repo:
 
