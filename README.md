@@ -6,7 +6,7 @@ Manage your CI/CD pipelines without build or deployment agents using AWS code to
 
 Assume less responsibilities, while at the same time achieving the same goal.
 
-AWS CodeBuild is designed to free developers from worrying about provisioning, managing and scaling their own build servers by providing ready-to-deploy software packages for building and testing code on popular platforms (including Windows Server)
+AWS CodeBuild and CodeDeploy are designed to free developers from worrying about provisioning, managing and scaling their own build and deployment servers by providing ready-to-deploy software packages for building, testing and deploying code on popular platforms (including Windows Server)
 
 Neo is a higher level layer on top of CodeBuild and CodeDeploy to manage your builds and deployments.
 
