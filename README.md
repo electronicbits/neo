@@ -11,7 +11,7 @@ Neo aims to take advantage of those services by providing an easy to use yml to 
 ## Advantages:
 
 - Managed services
-- Cheap, very cheap.
+- Very cheap
 - No need to maintain agents or pay the costs associated.
 - Pay only for the used services
 - Each codepipeline is free for the first 30 days (AWS lets you experiment with it)
