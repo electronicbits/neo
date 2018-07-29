@@ -74,5 +74,7 @@ You can now run neo as a CLI:
 
 `bundle exec ruby ./bin/neo create_pipeline <pipelie-yml-location>`
 
-[How to debug neo](docs/debugging.md)
+### Debugging neo
+
+[Link here](docs/debugging.md)
 
