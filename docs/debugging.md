@@ -1,6 +1,7 @@
 ### Debugging neo with VS Code
 
 - After installing ruby, make sure you have also installed bundler and rake
+    
     `gem install rake`
     `gem install bundle`
 
