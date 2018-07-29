@@ -14,7 +14,6 @@ module Neo
         attr_accessor :repo             #ie 'helloworld'
         attr_accessor :branch           #ie 'master'
 
-
         #if github 
         attr_accessor :gitHubToken      #TODO: check this one, as may require aditional security # secret value
         #end if

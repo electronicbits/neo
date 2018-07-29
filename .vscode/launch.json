@@ -10,7 +10,7 @@
             "request": "launch",
             "cwd": "${workspaceRoot}",
             "program": "${workspaceRoot}/bin/neo",
-            "args": ["create_pipeline"]
+            "args": ["create_pipeline","../spec/example/apps.yml"]
         },
         {
             "name": "Listen for rdebug-ide",
