@@ -8,6 +8,12 @@ AWS CodeBuild and CodeDeploy are designed to remove concerns about provisioning,
 
 Neo aims to take advantage of those services by providing an easy to use yml to cloudformation pipeline generator.
 
+AWS CodeBuild and CodeDeploy are designed to free developers from worrying about provisioning, managing and scaling their own build and deployment servers by providing ready-to-deploy software packages for building, testing and deploying code on popular platforms (including Windows Server)
+
+Neo is a higher level layer on top of CodeBuild and CodeDeploy to manage your builds and deployments.
+
+No need for agents.
+
 ## Advantages:
 
 - Managed services
