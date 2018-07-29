@@ -49,12 +49,7 @@ In many cases, CodeBuild project will suffice, as it will be a matter of simply 
 - copy resources to a S3 bucket
 - build and upload docker images (the build will not just create the image, but also execute any build process)
 
+### [Installing neo](docs/installing.md)
 
-### Installing Neo
-
-[Link here](docs/installing.md)
-
-### Debugging neo
-
-[Link here](docs/debugging.md)
+### [Debugging neo](docs/debugging.md)
 
