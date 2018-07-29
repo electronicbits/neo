@@ -6,7 +6,7 @@ You have two options:
 
     2- Run the bin file directly
 
-# Details
+### Details
 
 1- Install the gem locally:
 
