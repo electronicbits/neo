@@ -15,7 +15,7 @@ command :create_pipeline do |c|
   c.action do |args, options|
     
     puts 'Creating codepipeline ...'
-    # config_file = args[0]
+    config_file = args[0]
     # puts args[0]
     # # result_file_location = args[1]
     

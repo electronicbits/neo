@@ -14,7 +14,7 @@ Neo aims to take advantage of those services by providing an easy to use yml to 
 - Very cheap
 - No need to maintain agents or pay the costs associated.
 - Pay only for the used services
-- Each codepipeline is free for the first 30 days (AWS lets you experiment with it)
+- Each codepipeline is free for the first 30 days (AWS lets you experiment with it first)
 - Builds happen inside docker containers
 - Build docker images can be specified
 - Already existing list of AWS curated docker containers for building projects
@@ -42,7 +42,7 @@ Secondly, the second stage of the pipeline would be required to make a call to u
 
 ### Is CodeDeploy needed to deploy applications?
 
-Not always. 
+Not always.
 
 In many cases, CodeBuild project will suffice, as it will be a matter of simply executing a postbuild command that could:
 
@@ -73,4 +73,6 @@ You can now run neo as a CLI:
 2- Run the bin file directly after cloning the repo:
 
 `bundle exec ruby ./bin/neo create_pipeline <pipelie-yml-location>`
+
+[How to debug neo](docs/debugging.md)
 
