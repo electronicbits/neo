@@ -16,4 +16,4 @@
 
 - Install VS Code Ruby Extension 
 
-- The .vscode folder already contains a launch.js configuration file that can changed as needed.
+- The .vscode folder already contains a launch.js configuration file that can be changed as needed.
