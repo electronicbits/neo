@@ -1,10 +1,12 @@
 # Neo
 
-Manage your CI/CD pipelines without build or deployment agents using AWS code tools.
+Manage your CI/CD pipelines without build or deployment **agents** using AWS code tools.
 
 ![neo vs agent](https://github.com/electronicbits/neo/blob/master/neo.gif "neo vs agent")
 
-Assume less responsibilities, while at the same time achieving the same goal.
+AWS CodeBuild and CodeDeploy are designed to remove concerns about provisioning, managing and scaling build and deployment servers by providing ready-to-deploy software packages for building, testing and deploying code on popular platforms (including Windows Server)
+
+Neo aims to take advantage of those services by providing an easy to use yml to cloudformation pipeline generator.
 
 ## Advantages:
 
@@ -48,7 +50,7 @@ In many cases, CodeBuild project will suffice, as it will be a matter of simply 
 - build and upload docker images (the build will not just create the image, but also execute any build process)
 
 
-### Running Neo
+### Installing Neo
 
 You have two options:
 1- Installing the gem locally
@@ -58,16 +60,17 @@ You have two options:
 
 After cloning this repository, build the gem file:
 
-`gem build neo`
+`sudo gem build neo`
 
 Once the gem file is generated, proceed to install it locally
 
-`gem install neo`
+`sudo gem install neo`
 
 You can now run neo as a CLI:
 
-`bundle exec neo create_pipeline`
+`neo create_pipeline <pipeline-yml-location>`
 
 2- Run the bin file directly after cloning the repo:
 
-`bundle exec ruby ./bin/neo create_pipeline`
+`bundle exec ruby ./bin/neo create_pipeline <pipelie-yml-location>`
+

@@ -1,4 +1,4 @@
-require 'models/CodeModel'
+require_relative 'CodeModel'
 
 module Neo
     class ConfigModel

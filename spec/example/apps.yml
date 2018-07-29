@@ -1,6 +1,7 @@
 code:
   codeHost: github 
   repository: hello-world
+  user: electronic-bits
 
 apps:
   hello-world:
@@ -10,11 +11,12 @@ apps:
     build: 
       - 'npm install && npm run build'
     deploy:
-      execute: 'aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}-Test/'
-      command: approve
-      execute: 'aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}/'
+      - execute: 'aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}-Test/'
+        command: approve
+      - execute: 'aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}/'
+        command: test
     settings:
       test:
-        setting1: tes1-setting
+        setting1: setting-in-test
       prod:
-        setting1: tes1-setting
+        setting1: setting-in-prod

@@ -1,7 +1,7 @@
 require 'yaml'
-require 'models/ConfigModel'
 require 'fileutils'
-require 'PipelineGenerator'
+require_relative 'models/ConfigModel'
+require_relative 'PipelineGenerator'
 
 module Neo
     class Startup

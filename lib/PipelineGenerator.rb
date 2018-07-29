@@ -1,10 +1,10 @@
 require 'erb'
 
 module Neo
-
     class PipelineGenerator
         
-        attr_reader :model, :template_location
+        attr_reader :model
+        attr_reader :template_location
 
         def create_pipeline(model, template_file_location, result_file_location)
             puts "creating codepipeline cloudformation"
@@ -20,15 +20,14 @@ module Neo
             puts "Writing down pipeline result file (cloudformation)"
 
             if result_file_location.nil?
-                file = Tempfile.new(["pipeline-cloudformation",".yaml"])
+                file = Tempfile.new(["pipeline-cloudformation",".yml"])
                 uniqueFilename = File.expand_path File.basename(file.path)
-                puts uniqueFilename
+                puts "temporary unique filename is #{uniqueFilename}"
                 file.close
 
                 File.write(uniqueFilename, result_file_content)
             else
                 File.write(result_file_location, result_file_content)
-                
             end
         end
     end
