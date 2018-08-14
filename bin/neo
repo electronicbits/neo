@@ -9,16 +9,19 @@ program :name, 'Neo'
 program :version, '1.0.0'
 program :description, 'Tools for creating and managing deploy and build pipelines in AWS'
 
+#the create_pipeline only creates a pipeline for
 command :create_pipeline do |c|
   c.syntax = 'neo create_pipeline <configfile>'
-  c.description = 'Creates a build and deployment pipeline in AWS'
+  c.description = 'Creates a startup build and deployment pipeline in AWS.'
   c.action do |args, options|
     
     puts 'Creating codepipeline ...'
     config_file = args[0]
     result_file_location = args[1]
+    branch = args[2]
     startup = Neo::Startup.new 
-    startup.parse(config_file, result_file_location)
+    startup.parse(config_file, result_file_location, branch)
+    
   end
 end
 
@@ -27,10 +30,10 @@ command :deploy_cf do |c|
   c.description = 'Creates a build and deployment pipeline in AWS'
   c.action do |args, options|
     
-    puts 'Creating codepipeline ...'
-    config_file = args[0]
-    result_file_location = args[1]
-    startup = Neo::Startup.new 
-    startup.parse(config_file, result_file_location)
+    # puts 'Creating codepipeline ...'
+    # config_file = args[0]
+    # result_file_location = args[1]
+    # startup = Neo::Startup.new 
+    # startup.parse(config_file, result_file_location)
   end
 end

@@ -5,12 +5,14 @@ module Neo
         
         attr_reader :model
         attr_reader :template_location
+        attr_reader :branch
 
-        def create_pipeline(model, template_file_location, result_file_location)
+        def create_pipeline(model, template_file_location, result_file_location, branch)
             puts "creating codepipeline cloudformation"
 
             @model = model
             @template_location = template_file_location
+            @branch = branch || "master" #defaults to master
 
             templateFileLocation = File.join(File.dirname(__FILE__), @template_location)
             templateString = File.read(templateFileLocation)
