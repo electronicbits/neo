@@ -4,7 +4,7 @@ Manage your CI/CD pipelines without build or deployment **agents** using AWS cod
 
 ![neo vs agent](https://github.com/electronicbits/neo/blob/master/neo.gif "neo vs agent")
 
-AWS CodeBuild and CodeDeploy are designed to remove concerns about provisioning, managing and scaling build and deployment servers by providing ready-to-deploy software packages for building, testing and deploying code on popular platforms (including Windows Server)
+AWS CodeBuild and CodeDeploy are designed to remove concerns about provisioning, managing and scaling build and deployment **agents** by providing ready-to-deploy software packages for building, testing and deploying code on popular platforms (including Windows Server)
 
 Neo aims to take advantage of those services by providing an easy to use yml to cloudformation pipeline generator.
 
