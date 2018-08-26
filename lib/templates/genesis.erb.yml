@@ -1,1 +1,183 @@
-<%= codeRepo.user %>
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Pipeline using CodePipeline and CodeBuild for continuous delivery of a static site application to S3
+Parameters:
+  SiteBucketName:
+    Type: String
+    Description: Name of bucket to create to host the website
+    Default: "static-site-554433"
+  GitHubUser:
+    Type: String
+    Description: GitHub User
+    Default: <%= codeRepo.user %>
+  GitHubRepo:
+    Type: String
+    Description: GitHub Repo to pull from. Only the Name. not the URL
+    Default: "helloworld"
+  GitHubBranch:
+    Type: String
+    Description: GitHub Branch
+    Default: "master"
+  GitHubToken:
+    NoEcho: true
+    Type: String
+    Description: Secret. 
+  BuildType:
+    Type: String
+    Default: "LINUX_CONTAINER"
+    Description: The build container type to use for building the app
+  BuildComputeType:
+    Type: String
+    Default: "BUILD_GENERAL1_SMALL"
+    Description: The build compute type to use for building the app
+  BuildImage:
+    Type: String
+    Default: "aws/codebuild/ubuntu-base:14.04"
+    Description: The build image to use for building the app - http://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-available.html  images here https://github.com/aws/aws-codebuild-docker-images
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "Site Configuration"
+        Parameters:
+          - SiteBucketName
+      - Label:
+          default: "GitHub Configuration"
+        Parameters:
+          - GitHubToken
+          - GitHubUser
+          - GitHubRepo
+          - GitHubBranch
+      - Label:
+          default: "Build Configuration"
+        Parameters:
+          - BuildType
+          - BuildComputeType
+          - BuildImage
+    ParameterLabels:
+      SiteBucketName:
+        default: Name of S3 Bucket to create for website hosting
+      GitHubToken:
+        default: GitHub OAuth2 Token
+      GitHubUser: 
+        default: GitHub User/Org Name
+      GitHubRepo: 
+        default: GitHub Repository Name
+      GitHubBranch: 
+        default: GitHub Branch Name
+      BuildType: 
+        default: CodeBuild type
+      BuildComputeType: 
+        default: CodeBuild instance type
+      BuildImage: 
+        default: CodeBuild image
+Resources:
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - codebuild.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: codebuild-service
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action: "*"
+            Resource: "*"
+          Version: '2012-10-17'
+  CodePipelineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - codepipeline.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: codepipeline-service
+        PolicyDocument:
+          Statement:
+          - Action:
+            - codebuild:*
+            Resource: "*"
+            Effect: Allow
+          - Action:
+            - s3:GetObject
+            - s3:GetObjectVersion
+            - s3:GetBucketVersioning
+            Resource: "*"
+            Effect: Allow
+          - Action:
+            - s3:PutObject
+            Resource:
+            - arn:aws:s3:::codepipeline*
+            Effect: Allow
+          - Action:
+            - s3:*
+            - cloudformation:*
+            - iam:PassRole
+            Resource: "*"
+            Effect: Allow
+          Version: '2012-10-17'
+  PipelineBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+
+  Pipeline:
+    Type: 'AWS::CodePipeline::Pipeline'
+    Properties:
+      ArtifactStore:
+        Type: S3
+        Location: !Ref ArtifactsBucket
+      Name: !Ref 'AWS::StackName'
+      RestartExecutionOnUpdate: true
+      RoleArn: !GetAtt 'PipelineRole.Arn'
+      Stages:
+      - Name: Source
+        Actions:
+        - InputArtifacts: [] 
+          Name: Source
+          ActionTypeId:
+            Category: Source
+            Owner: ThirdParty
+            Version: '1'
+            Provider: GitHub
+          Configuration:
+            Owner: !Ref GitHubUser
+            Repo: !Ref GitHubRepo
+            Branch: !Ref GitHubBranch
+            OAuthToken: !Ref GitHubToken
+          OutputArtifacts:
+            - Name: Source
+          RunOrder: 1
+
+      - Name: Pipeline
+        Actions:
+        - Name: DeployPipeline
+          ActionTypeId:
+            Category: Deploy
+            Owner: AWS
+            Provider: CloudFormation
+            Version: 1
+          Configuration:
+            ActionMode: CREATE_UPDATE
+            Capabilities: CAPABILITY_IAM
+            RoleArn: !GetAtt 'CloudFormationRole.Arn'
+            StackName: !Ref 'AWS::StackName'
+            TemplatePath: 'Source::deploy/pipeline.yml'
+            ParameterOverrides: !Sub '{"RepositoryName": "${GitHubRepo}", "BranchName": "${GitHubBranch}"}'
+          InputArtifacts:
+          - Name: Source
+          RunOrder: 1
+      
