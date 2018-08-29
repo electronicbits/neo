@@ -1,37 +1,14 @@
 require_relative 'CodeModel'
+require_relative 'BuildModel'
 
 module Neo
     class ConfigModel
-        
-        # attr_accessor :codeHost         # github, bitbucket, codecommit ?
-
-        attr_accessor :test
-
         attr_accessor :codeRepo
-
-        attr_accessor :siteBucketName   #ie 'static-site-554433'
-        attr_accessor :user             #ie 'electronicbits'
-        attr_accessor :repo             #ie 'helloworld'
-        attr_accessor :branch           #ie 'master'
-
-        #if github 
-        attr_accessor :gitHubToken      #TODO: check this one, as may require aditional security # secret value
-        #end if
-
-        attr_accessor :buildType        #ie LINUX_CONTAINER
-        attr_accessor :buildComputeType #ie BUILD_GENERAL1_SMALL
-        attr_accessor :buildImage       #ie 'aws/codebuild/ubuntu-base:14.04'
-
-        attr_accessor :options
+        attr_accessor :build
 
         def initialize(options)
-            @options = options
-            
             @codeRepo = Neo::CodeModel.new(options["code"])
-
-            # @user = options[code]
-            # @codeHost = options.codeHost
-            
+            @build = Neo::BuildModel.new(options["build"])
         end
 
         def get_binding

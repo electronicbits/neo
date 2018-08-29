@@ -2,6 +2,11 @@ code:
   codeHost: github 
   repository: hello-world
   user: electronic-bits
+  # branch: master
+build:
+  buildType: LINUX_CONTAINER
+  buildComputeType: BUILD_GENERAL1_SMALL
+  buildImage: aws/codebuild/ubuntu-base:14.04
 
 apps:
   hello-world:
