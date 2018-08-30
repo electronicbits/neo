@@ -8,7 +8,7 @@ module Neo
         attr_reader :branch
 
         def create_pipeline(model, template_file_location, result_file_location, branch)
-            puts "creating codepipeline cloudformation"
+            puts "Creating codepipeline cloudformation ..."
 
             @model = model
             @template_location = template_file_location
@@ -28,8 +28,10 @@ module Neo
                 file.close
 
                 File.write(uniqueFilename, result_file_content)
+                return uniqueFilename
             else
                 File.write(result_file_location, result_file_content)
+                return result_file_location
             end
         end
     end

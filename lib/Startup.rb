@@ -1,8 +1,9 @@
 require 'yaml'
 require 'fileutils'
-require 'autostacker24'
+# require 'autostacker24'
 require_relative 'models/ConfigModel'
 require_relative 'PipelineGenerator'
+require_relative 'PipelineDeployer'
 
 module Neo
     class Startup
@@ -11,7 +12,7 @@ module Neo
             @genesis_template_file = "templates/genesis.erb.yml"
         end
 
-        def parse(pipeline_file, result_file_location, branch)
+        def run(pipeline_file, result_file_location, branch)
             
             pipelineFileLocation = File.join(File.dirname(__FILE__), pipeline_file)
 
@@ -23,13 +24,21 @@ module Neo
 
             # puts configmodel.codeRepo.user
             pipeline_generator = PipelineGenerator.new
-            pipeline_generator.create_pipeline(configmodel, 
+            result_file_location = pipeline_generator.create_pipeline(configmodel,
                 @genesis_template_file, 
                 result_file_location, 
                 branch)
 
             #deploy genesis pipeline using autostacker
- 
+            pipeline_deployer = PipelineDeployer.new
+
+            #TODO: need to read parameters from secrets repository
+            params = {
+                GitHubToken:  <none>
+              }
+            pipeline_deployer.deploy_pipeline(result_file_location, parameters)
+
         end
+
     end
 end
