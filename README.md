@@ -4,7 +4,7 @@ Manage your CI/CD pipelines without build or deployment **agents** using AWS cod
 
 ![neo vs agent](https://github.com/electronicbits/neo/blob/master/neo.gif "neo vs agent")
 
-Neo helps you stay away from those nasty agents (get it ?)
+Neo helps you stay away from those nasty agents (get it?)
 
 AWS CodeBuild and CodeDeploy are designed to remove concerns about provisioning, managing and scaling build and deployment **agents** by providing ready-to-deploy software packages for building, testing and deploying code on popular platforms (including Windows Server)
 
