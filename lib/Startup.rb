@@ -17,7 +17,7 @@ module Neo
             pipelineFileLocation = File.join(File.dirname(__FILE__), pipeline_file)
 
             parsed_pipeline = YAML.load_file(pipelineFileLocation)
-            p parsed_pipeline.inspect # will print the file
+            p parsed_pipeline.inspect # will print the file name
 
             #load parsed file into model
             configmodel = Neo::ConfigModel.new(parsed_pipeline)
@@ -25,20 +25,31 @@ module Neo
             # puts configmodel.codeRepo.user
             pipeline_generator = PipelineGenerator.new
             result_file_location = pipeline_generator.create_pipeline(configmodel,
-                @genesis_template_file, 
-                result_file_location, 
+                @genesis_template_file,
+                result_file_location,
                 branch)
 
             #deploy genesis pipeline using autostacker
             pipeline_deployer = PipelineDeployer.new
 
             #TODO: need to read parameters from secrets repository
-            params = {
-                GitHubToken:  <none>
+            #TODO: generate list of tags
+            tags = [
+                { "Key": "ApplicationName", "Value": "TheNameOfTheApp"}
+            ]
+
+            parameters = {
+                GitHubToken:  ''
               }
-            pipeline_deployer.deploy_pipeline(result_file_location, parameters)
+
+            stackName = 'test-stack'
+
+            pipeline_deployer.deploy_pipeline(
+                result_file_location,
+                parameters,
+                stackName,
+                tags)
 
         end
-
     end
 end
