@@ -25,3 +25,5 @@ You can now run neo as a CLI:
 2- Run the bin file directly after cloning the repo:
 
     bundle exec ruby ./bin/neo create_pipeline <pipelie-yml-location>
+
+

@@ -15,6 +15,8 @@ module Neo
         def run(pipeline_file, result_file_location, branch)
             
             pipelineFileLocation = File.join(File.dirname(__FILE__), pipeline_file)
+            puts 'the pipeline file is located here...'
+            puts pipelineFileLocation
 
             parsed_pipeline = YAML.load_file(pipelineFileLocation)
             p parsed_pipeline.inspect # will print the file name
@@ -39,7 +41,7 @@ module Neo
             ]
 
             parameters = {
-                GitHubToken:  ''
+                GitHubToken:  '5ab9a154a14d57cb047b9236a3ab3c4dba245daf'
               }
 
             stackName = 'test-stack'

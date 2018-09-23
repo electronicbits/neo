@@ -130,16 +130,43 @@ Resources:
             Resource: "*"
             Effect: Allow
           Version: '2012-10-17'
-  
-    # S3 bucket to store artifacts used between deployment stages
-    ArtifactsBucket:
-      DependsOn: CloudFormationRole # make sure that CloudFormationRole is deleted last
-      DeletionPolicy: Retain
-      Type: 'AWS::S3::Bucket'
+  CloudFormationRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - 'cloudformation.amazonaws.com'
+          Action:
+          - 'sts:AssumeRole'
+      ManagedPolicyArns:
+      - 'arn:aws:iam::aws:policy/AdministratorAccess'
+      
+  PipelineRole:
+    DependsOn: CloudFormationRole # make sure that CloudFormationRole is deleted last
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - 'codepipeline.amazonaws.com'
+          Action:
+          - 'sts:AssumeRole'
+      ManagedPolicyArns:
+      - 'arn:aws:iam::aws:policy/AdministratorAccess'
 
-    # PipelineBucket:
-    #   Type: AWS::S3::Bucket
-    #   DeletionPolicy: Delete  
+      
+  # S3 bucket to store artifacts used between deployment stages
+  ArtifactsBucket:
+    DependsOn: CloudFormationRole # make sure that CloudFormationRole is deleted last
+    DeletionPolicy: Retain
+    Type: 'AWS::S3::Bucket'
 
   Pipeline:
     Type: 'AWS::CodePipeline::Pipeline'

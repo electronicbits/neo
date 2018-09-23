@@ -10,9 +10,9 @@ program :version, '1.0.0'
 program :description, 'Tools for creating and managing deploy and build pipelines in AWS'
 
 #creates the genesis pipeline
-command :create_genesis_pipeline do |c|
+command :create_pipeline do |c|
   c.syntax = 'neo create_pipeline <configfile>'
-  c.description = 'Creates a startup build and deployment pipeline in AWS.'
+  c.description = 'Creates a genesis pipeline in AWS Codepipeline'
   c.action do |args, options|
     
     puts 'Creating codepipeline ...'
