@@ -29,7 +29,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency 'commander', '>= 4.4'
-  spec.add_dependency 'autostacker24'
-  spec.add_dependency 'lono'
+  spec.add_dependency 'aws-sdk','~> 2'
+  # spec.add_dependency 'autostacker24'
+  # spec.add_dependency 'lono'
 
 end

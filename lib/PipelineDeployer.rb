@@ -1,8 +1,11 @@
-require 'autostacker24'
+# require 'autostacker24'
 require_relative 'logger/Logger'
+require 'aws-sdk'
 
 module Neo
     class PipelineDeployer
+
+        @environment = "kaos"
 
         def initialize()
         end
@@ -12,23 +15,39 @@ module Neo
             Logger.debug 'Deploying codepipeline cloudformation...'
             # puts 'Deploying codepipeline cloudformation...'
 
-            Stacker.create_or_update_stack(
-                
-                # stack_name, 
-                # template, 
-                # parameters, 
-                # parent_stack_name = nil, 
-                # tags = nil, 
-                # timeout_in_minutes = DEFAULT_TIMEOUT, 
-                # role_arn: nil
+            templateContent = File.read(pipeline_file_location)
 
+            puts templateContent
 
-                @stack_name, 
-                pipeline_file_location, 
-                parameters,
-                nil,
-                nil,
-                tags)
+            stack_name = 'test-stack'
+            on_failure = 'DO_NOTHING'
+            parameters_temp = [
+                { parameter_key: 'DBName',         parameter_value: @db_name },
+                { parameter_key: 'DBPassword',     parameter_value: @db_password }                
+            ]
+
+            cf = Aws::CloudFormation::Client.new
+
+            resp = cf.create_stack \
+                stack_name: stack_name, template_body: templateContent,
+                parameters: parameters_temp, on_failure: on_failure
+
+            # Stacker.create_or_update_stack(
+
+            #     # stack_name,
+            #     # template,
+            #     # parameters,
+            #     # parent_stack_name = nil,
+            #     # tags = nil,
+            #     # timeout_in_minutes = DEFAULT_TIMEOUT,
+            #     # role_arn: nil
+
+            #     stack_name,
+            #     pipeline_file_location,
+            #     parameters,
+            #     nil,
+            #     [])
+            #     #nil)
 
         end
     end
