@@ -17,7 +17,7 @@ module Neo
 
             templateContent = File.read(pipeline_file_location)
 
-            puts templateContent
+            # puts templateContent
 
             stack_name = 'test-stack'
             on_failure = 'DO_NOTHING'

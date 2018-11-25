@@ -17,9 +17,9 @@ apps:
       - 'npm install && npm run build'
     deploy:
       - execute: 'aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}-Test/'
-        command: approve
+        label: approve
       - execute: 'aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}/'
-        command: test
+        label: test
     settings:
       test:
         setting1: setting-in-test
