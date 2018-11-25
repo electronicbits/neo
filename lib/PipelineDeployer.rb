@@ -13,19 +13,8 @@ module Neo
         def deploy_pipeline(pipeline_file_location, parameters, stack_name, tags)
 
             Logger.debug 'Deploying codepipeline cloudformation...'
-            # puts 'Deploying codepipeline cloudformation...'
-
             templateContent = File.read(pipeline_file_location)
-
-            # puts templateContent
-
-            stack_name = 'test-stack'
             on_failure = 'DO_NOTHING'
-            # parameters_temp = [
-            #     { parameter_key: 'DBName',         parameter_value: @db_name },
-            #     { parameter_key: 'DBPassword',     parameter_value: @db_password }                
-            # ]
-
             cf = Aws::CloudFormation::Client.new
 
             resp = cf.create_stack \
