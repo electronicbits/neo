@@ -21,34 +21,20 @@ module Neo
 
             stack_name = 'test-stack'
             on_failure = 'DO_NOTHING'
-            parameters_temp = [
-                { parameter_key: 'DBName',         parameter_value: @db_name },
-                { parameter_key: 'DBPassword',     parameter_value: @db_password }                
-            ]
+            # parameters_temp = [
+            #     { parameter_key: 'DBName',         parameter_value: @db_name },
+            #     { parameter_key: 'DBPassword',     parameter_value: @db_password }                
+            # ]
 
             cf = Aws::CloudFormation::Client.new
 
             resp = cf.create_stack \
-                stack_name: stack_name, template_body: templateContent,
-                parameters: parameters_temp, on_failure: on_failure
+                stack_name: stack_name, template_body: templateContent, \
+                parameters: parameters, on_failure: on_failure, \
+                capabilities: ["CAPABILITY_IAM"]
 
-            # Stacker.create_or_update_stack(
-
-            #     # stack_name,
-            #     # template,
-            #     # parameters,
-            #     # parent_stack_name = nil,
-            #     # tags = nil,
-            #     # timeout_in_minutes = DEFAULT_TIMEOUT,
-            #     # role_arn: nil
-
-            #     stack_name,
-            #     pipeline_file_location,
-            #     parameters,
-            #     nil,
-            #     [])
-            #     #nil)
-
+            puts "Pipeline deployed"
+            
         end
     end
 end

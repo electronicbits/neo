@@ -1,5 +1,6 @@
 require 'yaml'
 require 'fileutils'
+require 'aws-sdk'
 # require 'autostacker24'
 require_relative 'models/ConfigModel'
 require_relative 'PipelineGenerator'
@@ -34,15 +35,26 @@ module Neo
             #deploy genesis pipeline using autostacker
             pipeline_deployer = PipelineDeployer.new
 
-            #TODO: need to read parameters from secrets repository
             #TODO: generate list of tags
             tags = [
-                { "Key": "ApplicationName", "Value": "TheNameOfTheApp"}
+                # { "Key": "ApplicationName", "Value": "TheNameOfTheApp"}
             ]
 
-            parameters = {
-                GitHubToken:  '5ab9a154a14d57cb047b9236a3ab3c4dba245daf'
-              }
+            # read github token from parameter store            
+            ssm_client = Aws::SSM::Client.new()
+            
+            result = ssm_client.get_parameter(
+                name: "github-access-token",
+                with_decryption: true
+            )
+            token = result.parameter.value
+
+            parameters = [
+                {
+                    parameter_key: "GitHubToken",
+                    parameter_value: "#{token}"
+                }
+            ]
 
             stackName = 'test-stack'
 

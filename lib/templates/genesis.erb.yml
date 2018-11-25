@@ -1,10 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Pipeline using CodePipeline and CodeBuild for continuous delivery of a static site application to S3
 Parameters:
-  # SiteBucketName:
-  #   Type: String
-  #   Description: Name of bucket to create to host the website
-  #   Default: "static-site-554433"
   GitHubUser:
     Type: String
     Description: GitHub User
