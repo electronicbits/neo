@@ -1,7 +1,7 @@
 code:
   codeHost: github 
   repository: hello-world
-  user: electronic-bits
+  user: electronicbits
   # branch: master
 build:
   buildType: LINUX_CONTAINER
@@ -10,6 +10,7 @@ build:
 
 steps:
   - label: Example test
+    type: build
     command: aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}/ 
     # buildType: LINUX_CONTAINER
     # buildComputeType: BUILD_GENERAL1_SMALL
@@ -17,15 +18,18 @@ steps:
     # artifacts_paths:  
   
   - label: Example test 2
+    type: deploy
     command: aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}/ 
     
   - wait
   
   - label: Example test 3
+    type: build
     command: aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}/ 
 
   - block
 
   - label: Example test 3
+    type: build
     command: aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}/ 
     

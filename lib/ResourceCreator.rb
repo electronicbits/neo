@@ -6,7 +6,6 @@ module Neo
         end
 
         def create_resource
-            
         end
     end
 end
