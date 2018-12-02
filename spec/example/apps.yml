@@ -1,6 +1,6 @@
 code:
   codeHost: github 
-  repository: hello-world
+  repository: test-app
   user: electronicbits
   # branch: master
 build:
