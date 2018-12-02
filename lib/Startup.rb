@@ -1,7 +1,6 @@
 require 'yaml'
 require 'fileutils'
 require 'aws-sdk'
-# require 'autostacker24'
 require_relative 'models/ConfigModel'
 require_relative 'PipelineGenerator'
 require_relative 'PipelineDeployer'
@@ -9,12 +8,19 @@ require_relative 'PipelineDeployer'
 module Neo
     class Startup
 
+        attr_reader :genesis_template_file
+        attr_reader :branch
+
         def initialize()
             @genesis_template_file = "templates/genesis.erb.yml"
         end
 
         def run(pipeline_file, result_file_location, branch)
+
+            @branch = branch || "master" #defaults to master
             
+            
+
             pipelineFileLocation = File.join(File.dirname(__FILE__), pipeline_file)
             puts 'the pipeline file is located here...'
             puts pipelineFileLocation
@@ -25,11 +31,16 @@ module Neo
             #load parsed file into model
             configmodel = Neo::ConfigModel.new(parsed_pipeline)
 
+            puts "Config settings:"
+            puts "Using branch : #{@branch}"
+            puts ""
+
             # puts configmodel.codeRepo.user
             pipeline_generator = PipelineGenerator.new
-            result_file_location = pipeline_generator.create_pipeline(configmodel,
+
+            pipeline_hash = pipeline_generator.create_pipeline(
+                configmodel,
                 @genesis_template_file,
-                result_file_location,
                 branch)
 
             #deploy genesis pipeline using autostacker
@@ -56,10 +67,10 @@ module Neo
                 }
             ]
 
-            stackName = 'test-stack'
+            stackName = "neo-codepipeline-#{configmodel.codeRepo.codeHost}-#{configmodel.codeRepo.repository}-#{@branch}"
 
             pipeline_deployer.deploy_pipeline(
-                result_file_location,
+                pipeline_hash,
                 parameters,
                 stackName,
                 tags)

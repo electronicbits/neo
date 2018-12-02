@@ -169,14 +169,17 @@ Resources:
     Properties:
       ArtifactStore:
         Type: S3
-        Location: !Ref ArtifactsBucket
-      Name: !Ref 'AWS::StackName'
+        Location: 
+          Ref: ArtifactsBucket
+      Name: 
+        Ref: 'AWS::StackName'
       RestartExecutionOnUpdate: true
-      RoleArn: !GetAtt 'PipelineRole.Arn'
+      RoleArn: 
+        Fn::GetAtt: ["PipelineRole","Arn"]
       Stages:
       - Name: Source
         Actions:
-        - InputArtifacts: [] 
+        - InputArtifacts: []
           Name: Source
           ActionTypeId:
             Category: Source
@@ -184,10 +187,14 @@ Resources:
             Version: '1'
             Provider: GitHub
           Configuration:
-            Owner: !Ref GitHubUser
-            Repo: !Ref GitHubRepo
-            Branch: !Ref GitHubBranch
-            OAuthToken: !Ref GitHubToken
+            Owner: 
+              Ref: GitHubUser
+            Repo: 
+              Ref: GitHubRepo
+            Branch: 
+              Ref: GitHubBranch
+            OAuthToken: 
+              Ref: GitHubToken
           OutputArtifacts:
             - Name: Source
           RunOrder: 1
@@ -203,10 +210,13 @@ Resources:
           Configuration:
             ActionMode: CREATE_UPDATE
             Capabilities: CAPABILITY_IAM
-            RoleArn: !GetAtt 'CloudFormationRole.Arn'
-            StackName: !Ref 'AWS::StackName'
+            RoleArn: 
+              Fn::GetAtt: ['CloudFormationRole','Arn']
+            StackName: 
+              Ref: 'AWS::StackName'
             TemplatePath: 'Source::deploy/pipeline.yml'
-            ParameterOverrides: !Sub '{"RepositoryName": "${GitHubRepo}", "BranchName": "${GitHubBranch}"}'
+            ParameterOverrides: 
+              Fn::Sub: '{"RepositoryName": "${GitHubRepo}", "BranchName": "${GitHubBranch}"}'
           InputArtifacts:
           - Name: Source
           RunOrder: 1

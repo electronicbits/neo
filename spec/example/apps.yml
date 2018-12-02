@@ -8,20 +8,24 @@ build:
   buildComputeType: BUILD_GENERAL1_SMALL
   buildImage: aws/codebuild/ubuntu-base:14.04
 
-apps:
-  hello-world:
-    os: windows
-    path: hello-world
-    type: s3-website
-    build: 
-      - 'npm install && npm run build'
-    deploy:
-      - execute: 'aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}-Test/'
-        label: approve
-      - execute: 'aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}/'
-        label: test
-    settings:
-      test:
-        setting1: setting-in-test
-      prod:
-        setting1: setting-in-prod
+steps:
+  - label: Example test
+    command: aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}/ 
+    # buildType: LINUX_CONTAINER
+    # buildComputeType: BUILD_GENERAL1_SMALL
+    # buildImage: aws/codebuild/ubuntu-base:14.04
+    # artifacts_paths:  
+  
+  - label: Example test 2
+    command: aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}/ 
+    
+  - wait
+  
+  - label: Example test 3
+    command: aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}/ 
+
+  - block
+
+  - label: Example test 3
+    command: aws s3 cp --recursive --acl public-read ./html s3://${SiteBucketName}/ 
+    

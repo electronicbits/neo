@@ -57,3 +57,5 @@ In many cases, CodeBuild project will suffice, as it will be a matter of simply 
 
 ### [Debugging neo](docs/debugging.md)
 
+### [How to use neo] (doc/howtouse.md)
+
