@@ -21,7 +21,7 @@ module Neo
             
             pipeline_file_location = File.join(File.dirname(__FILE__), pipeline_file)
             puts 'the pipeline file is located here...'
-            puts pipelineFileLocation
+            puts pipeline_file_location
 
             parsed_pipeline = YAML.load_file(pipeline_file_location)
             p parsed_pipeline.inspect # will print the file name
@@ -33,7 +33,7 @@ module Neo
             puts "Using branch : #{@branch}"
             
 
-            # puts configmodel.codeRepo.user
+            # puts config_model.codeRepo.user
             pipeline_generator = PipelineGenerator.new
 
             pipeline_hash = pipeline_generator.create_pipeline(
@@ -65,7 +65,7 @@ module Neo
                 }
             ]
 
-            stackName = "neo-pipeline-#{configmodel.codeRepo.codeHost}-#{configmodel.codeRepo.repository}-#{@branch}"
+            stackName = "neo-pipeline-#{config_model.codeRepo.codeHost}-#{config_model.codeRepo.repository}-#{@branch}"
 
             pipeline_deployer.deploy_pipeline(
                 pipeline_hash,
