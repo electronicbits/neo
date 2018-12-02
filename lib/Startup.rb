@@ -19,31 +19,29 @@ module Neo
 
             @branch = branch || "master" #defaults to master
             
-            
-
-            pipelineFileLocation = File.join(File.dirname(__FILE__), pipeline_file)
+            pipeline_file_location = File.join(File.dirname(__FILE__), pipeline_file)
             puts 'the pipeline file is located here...'
             puts pipelineFileLocation
 
-            parsed_pipeline = YAML.load_file(pipelineFileLocation)
+            parsed_pipeline = YAML.load_file(pipeline_file_location)
             p parsed_pipeline.inspect # will print the file name
 
             #load parsed file into model
-            configmodel = Neo::ConfigModel.new(parsed_pipeline)
+            config_model = Neo::ConfigModel.new(parsed_pipeline)
 
             puts "Config settings:"
             puts "Using branch : #{@branch}"
-            puts ""
+            
 
             # puts configmodel.codeRepo.user
             pipeline_generator = PipelineGenerator.new
 
             pipeline_hash = pipeline_generator.create_pipeline(
-                configmodel,
+                config_model,
                 @genesis_template_file,
                 branch)
 
-            #deploy genesis pipeline using autostacker
+            #deploy genesis pipeline
             pipeline_deployer = PipelineDeployer.new
 
             #TODO: generate list of tags
@@ -67,7 +65,7 @@ module Neo
                 }
             ]
 
-            stackName = "neo-codepipeline-#{configmodel.codeRepo.codeHost}-#{configmodel.codeRepo.repository}-#{@branch}"
+            stackName = "neo-pipeline-#{configmodel.codeRepo.codeHost}-#{configmodel.codeRepo.repository}-#{@branch}"
 
             pipeline_deployer.deploy_pipeline(
                 pipeline_hash,

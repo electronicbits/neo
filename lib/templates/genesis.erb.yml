@@ -161,7 +161,7 @@ Resources:
   # S3 bucket to store artifacts used between deployment stages
   ArtifactsBucket:
     DependsOn: CloudFormationRole # make sure that CloudFormationRole is deleted last
-    DeletionPolicy: Retain
+    DeletionPolicy: Delete
     Type: 'AWS::S3::Bucket'
 
   Pipeline:
