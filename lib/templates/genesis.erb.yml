@@ -159,24 +159,63 @@ Resources:
 
       
   # S3 bucket to store artifacts used between deployment stages
-  ArtifactsBucket:
-    DependsOn: CloudFormationRole # make sure that CloudFormationRole is deleted last
-    DeletionPolicy: Delete
-    Type: 'AWS::S3::Bucket'
+  # ArtifactsBucket:
+  #   DependsOn: CloudFormationRole # make sure that CloudFormationRole is deleted last
+  #   DeletionPolicy: Retain
+  #   Type: 'AWS::S3::Bucket'
+  #   Properties:
+  #     BucketName: 'neo-codepipeline-artifacts'
+
+
+  CodeBuildCloudformationTemplate:
+    Type: AWS::CodeBuild::Project
+    DependsOn: CodeBuildRole
+    Properties:
+      Name: 
+        Fn::Sub: ${AWS::StackName}-CreateCloudformationTemplate
+      Description: Deploy site to S3
+      ServiceRole: 
+        Fn::GetAtt: CodeBuildRole.Arn
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        Type: 
+          Ref: BuildType
+        ComputeType: 
+          Ref: BuildComputeType
+        Image: 
+          Fn::Sub: ${BuildImage}
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: |
+          # Fn::Sub :
+            version: 0.1
+            phases:
+              build:
+                commands:
+                  - echo "this is a test"
+            artifacts:
+              type: zip
+              files:
+                - ./deploy/pipeline.yml
+      TimeoutInMinutes: 10
 
   Pipeline:
     Type: 'AWS::CodePipeline::Pipeline'
     Properties:
       ArtifactStore:
         Type: S3
-        Location: 
-          Ref: ArtifactsBucket
+        Location: 'neo-codepipeline-artifacts'
+          # Ref: ArtifactsBucket
       Name: 
         Ref: 'AWS::StackName'
       RestartExecutionOnUpdate: true
       RoleArn: 
         Fn::GetAtt: ["PipelineRole","Arn"]
       Stages:
+
+      # loads source into the s3 bucket
+
       - Name: Source
         Actions:
         - InputArtifacts: []
@@ -196,7 +235,26 @@ Resources:
             OAuthToken: 
               Ref: GitHubToken
           OutputArtifacts:
-            - Name: Source
+            - Name: SourceCode
+          RunOrder: 1
+  
+      # grabs the pipeline.yml file and outputs the cloudformation using neo into the output
+
+      - Name: BuildCloudformationTemplate
+        Actions:
+        - Name: Artifact
+          ActionTypeId:
+            Category: Build
+            Owner: AWS
+            Version: '1'
+            Provider: CodeBuild
+          InputArtifacts:
+          - Name: SourceCode
+          OutputArtifacts:
+          - Name: PipelineCloudformationOutput
+          Configuration:
+            ProjectName: 
+              Ref: CodeBuildCloudformationTemplate
           RunOrder: 1
 
       # - Name: Pipeline
@@ -221,26 +279,24 @@ Resources:
       #     - Name: Source
       #     RunOrder: 1
       
-
-      - Name: Pipeline
-        Actions:
-        - Name: DeployPipeline
-          ActionTypeId:
-            Category: Deploy
-            Owner: AWS
-            Provider: CloudFormation
-            Version: 1
-          Configuration:
-            ActionMode: CREATE_UPDATE
-            Capabilities: CAPABILITY_IAM
-            RoleArn: 
-              Fn::GetAtt: ['CloudFormationRole','Arn']
-            StackName: 
-              Ref: 'AWS::StackName'
-            TemplatePath: 'Source::deploy/pipeline.yml'
-            ParameterOverrides: 
-              Fn::Sub: '{"RepositoryName": "${GitHubRepo}", "BranchName": "${GitHubBranch}"}'
-          InputArtifacts:
-          - Name: Source
-          RunOrder: 1
-      
+      # - Name: Pipeline
+      #   Actions:
+      #   - Name: DeployPipeline
+      #     ActionTypeId:
+      #       Category: Deploy
+      #       Owner: AWS
+      #       Provider: CloudFormation
+      #       Version: 1
+      #     Configuration:
+      #       ActionMode: CREATE_UPDATE
+      #       Capabilities: CAPABILITY_IAM
+      #       RoleArn: 
+      #         Fn::GetAtt: ['CloudFormationRole','Arn']
+      #       StackName: 
+      #         Ref: 'AWS::StackName'
+      #       TemplatePath: 'Source::deploy/pipeline.yml'
+      #       ParameterOverrides: 
+      #         Fn::Sub: '{"RepositoryName": "${GitHubRepo}", "BranchName": "${GitHubBranch}"}'
+      #     InputArtifacts:
+      #     - Name: Source
+      #     RunOrder: 1
