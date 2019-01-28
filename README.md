@@ -1,3 +1,5 @@
+# Note: Further work on this repository is being licensed and continued privately.
+
 # Neo
 
 Manage your CI/CD pipelines without build or deployment **agents** using AWS code tools.
