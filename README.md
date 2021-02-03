@@ -1,4 +1,4 @@
-# Note: Further work on this repository is being licensed and continued privately.
+# Note: Further work on this repository is being continued privately.
 
 # Neo
 
